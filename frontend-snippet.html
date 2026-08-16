@@ -1,0 +1,61 @@
+<!-- Add this inside your portfolio's index.html, e.g. as a new page/section called "contact" -->
+
+<div class="page" id="contact">
+<div class="wrap">
+<h2>Contact</h2>
+<div class="item">
+<form id="contactForm">
+  <div style="margin-bottom:14px;">
+    <input type="text" id="cf-name" placeholder="Your name" required
+      style="width:100%;padding:10px;background:#1c202a;border:1px solid var(--border);color:var(--text);font-family:inherit;">
+  </div>
+  <div style="margin-bottom:14px;">
+    <input type="email" id="cf-email" placeholder="Your email" required
+      style="width:100%;padding:10px;background:#1c202a;border:1px solid var(--border);color:var(--text);font-family:inherit;">
+  </div>
+  <div style="margin-bottom:14px;">
+    <textarea id="cf-message" placeholder="Your message" required rows="5"
+      style="width:100%;padding:10px;background:#1c202a;border:1px solid var(--border);color:var(--text);font-family:inherit;"></textarea>
+  </div>
+  <button type="submit" style="padding:10px 22px;background:none;border:1px solid var(--border);color:var(--text);font-family:inherit;cursor:pointer;">
+    Send
+  </button>
+  <p id="cf-status" style="margin-top:10px;font-size:0.85rem;color:var(--muted);"></p>
+</form>
+</div>
+</div>
+</div>
+
+<script>
+// IMPORTANT: replace this with your actual deployed backend URL after deploying
+const BACKEND_URL = "https://YOUR-BACKEND-URL.onrender.com/contact";
+
+document.getElementById('contactForm').addEventListener('submit', async function(e){
+  e.preventDefault();
+  const status = document.getElementById('cf-status');
+  status.textContent = "Sending...";
+
+  const payload = {
+    name: document.getElementById('cf-name').value,
+    email: document.getElementById('cf-email').value,
+    message: document.getElementById('cf-message').value
+  };
+
+  try {
+    const res = await fetch(BACKEND_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload)
+    });
+    if (!res.ok) throw new Error("Server error");
+    status.textContent = "Thanks! Your message was received.";
+    document.getElementById('contactForm').reset();
+  } catch (err) {
+    status.textContent = "Something went wrong. Please try again or email me directly.";
+  }
+});
+</script>
+
+<!-- Also add a Contact button to your sidebar and navbtns, same style as your other nav buttons:
+<button data-page="contact">Contact</button>
+-->
